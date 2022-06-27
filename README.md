@@ -4,7 +4,7 @@ Questo progetto consiste nello sviluppo di un bot di Telegram basato sulle API f
 ## Install Requirements
 Installare i seguenti packages da dover importare su python
 ```
-pip3 install requirements_dev.txt
+pip3 install -r requirements_dev.txt
 ```
 
 
@@ -22,4 +22,4 @@ https://www.protectedtext.com/spotigram-bot-key
 
 Verrano aggiunte altre features se possibili _(Come ad esempio ottenere l'URL di un'immagine dell'artista)_
 
-Progetto assegnato a @Gangelo99 @DaniMigli e @felix5599
+Progetto assegnato a @Gangelo99 @DaniMigli @felix5599 @LuxPae
