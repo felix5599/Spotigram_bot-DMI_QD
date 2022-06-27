@@ -1,42 +1,50 @@
 #!/usr/bin/python
 
 #Import dei vari packages
+from unittest import result
 import telebot
-from telegram import MessageId
+#from telegram import MessageId
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 #SPOTIPY SETTINGS -  Queste variabili vengono prese da Spotify for Developer
-cid = "AGGIUNGERE CID"
-cid_secret = "AGGIUNGERE CID_SECRET"
+cid = "aggiungere CID"
+cid_secret = "aggiungere cid_secret"
+
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id= cid, client_secret= cid_secret))
 
 #TOKEN Bot telegram
-API_TOKEN = 'AGGIUNGERE API TOKEN'
+API_TOKEN = 'aggiungere api token'
 bot = telebot.TeleBot(API_TOKEN)
 
-# Prende come parametri i comandi /help e /start 
-@bot.message_handler(commands=['help', 'start'])
-def send_welcome(message):   
-    bot.reply_to(message, "Prova comando start o help")
-   
+# ========== TOP 5 TRACCIE ARTISTA ==========
+@bot.message_handler(commands=['top'])
+def top_artisti(message):
+    bot.send_message(message.chat.id, "Inviami il nome di un artista e ti dirò quali sono le sue 5 canzoni più famose!")
+    bot.register_next_step_handler(message, nome_artista)
 
-# Handle all other messages with content_type 'text' (content_types defaults to ['text'])
-# Qualsiasi messaggio venga inviato farà una ricerca su spotify, inviando i primi 5 risultati
-@bot.message_handler(func=lambda message: True)
-def echo_message(message):
-    messaggioDaInviare = []
-    results = sp.search(q= message.text, limit= 5) #Risultati della ricerca di spotify
-    for idx, track in enumerate(results['tracks']['items']):
-        buffer1 = idx
-        buffer2 = track['name']
-        buffer3 = str(buffer1) + ": " + buffer2
-        messaggioDaInviare.append(buffer3)
+def nome_artista(message):
+    try:
+        chat_id = message.chat.id
+        input_text = message.text
+        results = sp.artist_top_tracks(search_artist_id(str (input_text)))
+    except Exception as e: 
+        bot.send_message(chat_id, "C'è stato un errore! Prova a inserire in modo corretto il nome dell'artista :/")
 
-    stringa_Messaggio = ''
-    for x in messaggioDaInviare:
-        stringa_Messaggio += x + "\n" 
-    bot.reply_to(message, stringa_Messaggio)
+    buffer = '' #Buffer da utilizzare per poi inviare il messaggio
+    for idx,track in enumerate(results['tracks'][:5]):
+        buffer += str(idx + 1)+ " " + track['name'] + "\n"
+
+    bot.send_message(chat_id, buffer)
+
+
+# ========== FUNZIONE CHE DA COME RITORNO L'ID DELL'ARTISTA ==========
+def search_artist_id(nome_artista) -> str:
+    results = sp.search(nome_artista, limit= 1, type="artist")
+    items = results['artists']['items']
+    risultato_finale = items[0]
+    
+    return(str(risultato_finale['uri']))
 
 bot.infinity_polling()
 
