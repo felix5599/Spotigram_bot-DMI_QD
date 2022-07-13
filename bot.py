@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 #Import dei vari packages
+from re import L
 from unittest import result
 import telebot
 #from telegram import MessageId
@@ -37,6 +38,34 @@ def nome_artista(message):
 
     bot.send_message(chat_id, buffer)
 
+# ========== INFORMAZIONI ARTISTA ==========
+@bot.message_handler(commands=['info'])
+def info_artisti(message):
+    bot.send_message(message.chat.id, "Inviami il nome di un artista e ti dirò le informazioni di questo artista!")
+    bot.register_next_step_handler(message, info_artista)
+
+def info_artista(message):
+    try:
+        chat_id = message.chat.id
+        input_text = message.text
+        results = sp.search(input_text, limit= 1, type="artist")
+    except Exception as e: 
+        bot.send_message(chat_id, "C'è stato un errore! Prova a inserire in modo corretto il nome dell'artista :/")
+    
+    items = results['artists']['items']
+    artist = items[0]
+    
+    image_url = artist['images'][0]['url']
+
+    caption = '' #Buffer da utilizzare per poi inviare il messaggio
+    caption += "Nome: " + artist['name'] + "\n"
+    caption += "Follower: " + str(artist['followers']['total']) + "\n"
+    caption += "Popolarità: " + str(artist["popularity"]) + "/100\n"
+    caption += "Generi: \n"
+    for genere in artist['genres']:
+        caption += "- " + genere + "\n"
+    
+    bot.send_photo(chat_id, image_url, caption)
 
 # ========== FUNZIONE CHE DA COME RITORNO L'ID DELL'ARTISTA ==========
 def search_artist_id(nome_artista) -> str:
