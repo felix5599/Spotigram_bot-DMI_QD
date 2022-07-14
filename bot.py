@@ -25,13 +25,13 @@ def send_welcome (message):
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
     command_message = str(message.text).lower() #Prende il comando inviato tramite messagio, e lo rende tutto minuscolo
-    if command_message == 'artista' :
+    if command_message == 'artista' : # Invia la lista delle canzoni più famose di un artista
         bot.send_message(message.chat.id, "Scrivimi il nome di un artista e ti dirò quali sono le sue 5 canzoni più famose!")
         bot.register_next_step_handler(message, nome_artista)
-    elif command_message == 'album' :
+    elif command_message == 'album' : # Invia le tracce di un album
         bot.send_message(message.chat.id, "Scrivimi l'album che cerchi e ti darò tutte le info! :) ")
         bot.register_next_step_handler(message, nome_album)
-    elif command_message == "info":
+    elif command_message == "info": #Da le varie informazioni di un artista
         bot.send_message(message.chat.id, "Inviami il nome di un artista e ti dirò le informazioni di questo artista!")
         bot.register_next_step_handler(message, info_artista)
 
@@ -115,16 +115,3 @@ def info_artista(message):
 
 # -----====== IL CODICE DEVE ESSERE SCRITTO PRIMA DI QUESTA FUNZIONE =====-----
 bot.infinity_polling()
-
-#QUA é STATA FATTA UNA BOZZA | LASCIARLA PER OGNI EVENIENZA
-# messaggioDaInviare = []
-# results = sp.search(q='pink floyd',  limit=20)
-# for idx, track in enumerate(results['tracks']['items']):
-#     buffer1 = idx
-#     buffer2 = track['name']
-#     buffer3 = str(buffer1) + ": " + buffer2
-#     messaggioDaInviare.append(buffer3)
-# stringa_Messaggio = ''
-# for x in messaggioDaInviare:
-#     stringa_Messaggio += x + "\n" 
-#print(stringa_Messaggio)
