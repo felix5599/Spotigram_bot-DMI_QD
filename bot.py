@@ -17,10 +17,10 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id= cid, clien
 # Bot Telegram
 bot = telebot.TeleBot(API_TOKEN)
 
-@bot.message_handler(commands=['start','help','aiuto','ciao'])
+@bot.message_handler(commands=['start','help','aiuto','ciao','info'])
 def send_welcome (message):
     bot.reply_to(message,"Ciao! sono SpotyBot, il mio compito è quello di aiutarti nel mondo della musica!")
-    bot.send_message(message.chat.id, "Scrivi 'artista' per sapere le canzoni più famose del tuo artista preferito! \nScrivi 'album' per sapere le canzoni dell'album che cerchi!")
+    bot.send_message(message.chat.id, "Scrivi 'artista' per sapere le canzoni più famose del tuo artista preferito! \nScrivi 'album' per sapere le canzoni dell'album che cerchi! \nScrivi 'info artista' per sapere le informazioni dell'artista che cerchi!\nScrivi 'info album' per sapere le informazioni dell'album che cerchi!")
 
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
@@ -31,9 +31,12 @@ def echo_message(message):
     elif command_message == 'album' :
         bot.send_message(message.chat.id, "Scrivimi l'album che cerchi e ti darò tutte le info! :) ")
         bot.register_next_step_handler(message, nome_album)
-    elif command_message == "info":
+    elif command_message == "info artista":
         bot.send_message(message.chat.id, "Inviami il nome di un artista e ti dirò le informazioni di questo artista!")
         bot.register_next_step_handler(message, info_artista)
+    elif command_message == "info album":
+        bot.send_message(message.chat.id, "Inviami il nome di un album e ti dirò le informazioni di questo album!")
+        bot.register_next_step_handler(message, info_album)
 
 
 # ========== TOP 5 TRACCE ARTISTA ==========
@@ -60,6 +63,32 @@ def search_artist_id(nome_artista) -> str:
     
     return(str(risultato_finale['uri']))
 # ============ FINE ARTISTA==================
+
+#========== INFO ALBUM ==========
+def info_album(message):
+    try:
+       chat_id = message.chat.id
+       input_text = message.text
+       results = sp.search(input_text, limit= 1, type="album")
+    except Exception as e:
+       bot.send_message(chat_id, "C'è stato un errore! Prova a inserire in modo corretto il nome dell'album :/")
+    
+    items = results['albums']['items']
+    risultato_finale = items[0]
+
+    print(risultato_finale)
+    #Caption per messaggio da inviare
+    nome_album_txt = "Nome dell'album: " + str(risultato_finale['name'])
+    tracce_totali_txt = "Numero di tracce totali: " + str(risultato_finale['total_tracks'])
+    data_rilascio_txt = "Data di rilascio: " + str(risultato_finale['release_date'])
+    caption = nome_album_txt + "\n" + tracce_totali_txt + "\n" + data_rilascio_txt
+
+    image_url = risultato_finale['images'][0]['url']
+
+    bot.send_photo(chat_id, image_url, caption)
+
+# ========== FINE INFO ALBUM ==========
+
 
 # ========== TRACCE ALBUM ==========
 def nome_album(message):
