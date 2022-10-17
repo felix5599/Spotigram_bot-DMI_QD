@@ -1,7 +1,9 @@
 <p align="center">
-	<img src="https://i.imgur.com/rzr8F2I.png" width=50% height=50%>
+	<img src="https://i.imgur.com/rzr8F2I.png" width=40% height=40%>
 </p>
+
 # Spotigram-bot - DMI-Quality Development Project
+
 A simple Telegram bot built with <a href="https://github.com/eternnoir/pyTelegramBotAPI">pyTelgramBotAPI</a> and <a href="https://github.com/plamere/spotipy">Spotipy</a>. It's a little assistant in which help you in the world of the music! You can search an album and receive the track list, the most of famous songs of an artists and other features!
 
 ## Install Requirements and setup
