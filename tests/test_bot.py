@@ -8,3 +8,4 @@ def test_search_artist_id():
 
 def test_search_album_id():
     assert src.bot.search_album_id("The Dark Side Of The Moon").replace("spotify:album:","") == "4LH4d3cOWNNsVw41Gqt2kv"
+    assert src.bot.search_album_id("Celebration Day").replace("spotify:album:","") == "0kTe1sQd9yhDsdG2Zth7X6"
