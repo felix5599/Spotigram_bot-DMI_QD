@@ -39,7 +39,7 @@ def echo_message(message):
         bot.register_next_step_handler(message, info_album)
 
 
-# ========== TOP 5 TRACCE ARTISTA ==========
+# ================== TOP 5 TRACCE ARTISTA ==================
 def nome_artista(message):
     try:
         chat_id = message.chat.id
@@ -62,9 +62,9 @@ def search_artist_id(nome_artista) -> str:
     risultato_finale = items[0]
     
     return(str(risultato_finale['uri']))
-# ============ FINE ARTISTA==================
+# ================== FINE ARTISTA ==================
 
-#========== INFO ALBUM ==========
+# ================== INFO ALBUM ==================
 def info_album(message):
     try:
        chat_id = message.chat.id
@@ -86,11 +86,10 @@ def info_album(message):
     image_url = risultato_finale['images'][0]['url']
 
     bot.send_photo(chat_id, image_url, caption)
+# ================== FINE INFO ALBUM ==================
 
-# ========== FINE INFO ALBUM ==========
 
-
-# ========== TRACCE ALBUM ==========
+# ================== TRACCE ALBUM ==================
 def nome_album(message):
     try:
        chat_id = message.chat.id
@@ -115,9 +114,9 @@ def search_album_id(nome_album) -> str:
     risultato_finale = items[0]
     
     return(str(risultato_finale['uri']))
-# ========== FINE TRACCE ALBUM ==========
+# ================== FINE TRACCE ALBUM ==================
 
-# ========== INFORMAZIONI ARTISTA ==========
+# ================== INFORMAZIONI ARTISTA ==================
 def info_artista(message):
     try:
         chat_id = message.chat.id
@@ -140,20 +139,7 @@ def info_artista(message):
         caption += "- " + genere + "\n"
     
     bot.send_photo(chat_id, image_url, caption)
-# ========== FINE INFORMAZIONI ARTISTA ==========
+# ================== FINE INFORMAZIONI ARTISTA ==================
 
 # -----====== IL CODICE DEVE ESSERE SCRITTO PRIMA DI QUESTA FUNZIONE =====-----
 bot.infinity_polling()
-
-#QUA é STATA FATTA UNA BOZZA | LASCIARLA PER OGNI EVENIENZA
-# messaggioDaInviare = []
-# results = sp.search(q='pink floyd',  limit=20)
-# for idx, track in enumerate(results['tracks']['items']):
-#     buffer1 = idx
-#     buffer2 = track['name']
-#     buffer3 = str(buffer1) + ": " + buffer2
-#     messaggioDaInviare.append(buffer3)
-# stringa_Messaggio = ''
-# for x in messaggioDaInviare:
-#     stringa_Messaggio += x + "\n" 
-#print(stringa_Messaggio)
