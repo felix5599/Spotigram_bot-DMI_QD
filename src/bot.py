@@ -20,8 +20,8 @@ bot = telebot.TeleBot(API_TOKEN)
 @bot.message_handler(commands=['start','help','aiuto','ciao','info'])
 def send_welcome (message):
     bot.reply_to(message,"Ciao! sono SpotyBot, il mio compito è quello di aiutarti nel mondo della musica!")
-    bot.send_message(message.chat.id, "Scrivi 'artista' per sapere le canzoni più famose del tuo artista preferito! \nScrivi 'album' per sapere le canzoni dell'album che cerchi! \nScrivi 'info artista' per sapere le informazioni dell'artista che cerchi!\nScrivi 'info album' per sapere le informazioni dell'album che cerchi!")
-
+    bot.send_message(message.chat.id, "Scrivi 'artista' per sapere le canzoni più famose del tuo artista preferito! \nScrivi 'album' per sapere le canzoni dell'album che cerchi! \nScrivi 'info artista' per sapere le informazioni dell'artista che cerchi!\nScrivi 'info album' per sapere le informazioni dell'album che cerchi!\nScrivi 'preview' per avere una preview della traccia!")
+    
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
     command_message = str(message.text).lower() #Prende il comando inviato tramite messagio, e lo rende tutto minuscolo
@@ -37,7 +37,9 @@ def echo_message(message):
     elif command_message == "info album":
         bot.send_message(message.chat.id, "Inviami il nome di un album e ti dirò le informazioni di questo album!")
         bot.register_next_step_handler(message, info_album)
-
+    elif command_message == "preview":
+        bot.send_message(message.chat.id, "Inviami il nome di una traccia e ti darò una preview della traccia!")
+        bot.register_next_step_handler(message, preview_tracks)
 
 # ================== TOP 5 TRACCE ARTISTA ==================
 def nome_artista(message):
@@ -140,6 +142,19 @@ def info_artista(message):
     
     bot.send_photo(chat_id, image_url, caption)
 # ================== FINE INFORMAZIONI ARTISTA ==================
+# ================== PREVIEW CANZONE ==================
+def preview_tracks(message):
+    try:
+       chat_id = message.chat.id
+       input_text = message.text
+       results = sp.search(input_text, limit= 1, type="track")
+    except Exception as e:
+       bot.send_message(chat_id, "C'è stato un errore! Prova a inserire in modo corretto il nome della traccia :/")
 
+    items = results['tracks']['items']
+    risultato_finale = items[0]['preview_url']
+    print(risultato_finale)
+    bot.send_audio(chat_id, audio= risultato_finale)
+# ================== FINE PREVIEW CANZONE ==================
 # -----====== IL CODICE DEVE ESSERE SCRITTO PRIMA DI QUESTA FUNZIONE =====-----
 bot.infinity_polling()
