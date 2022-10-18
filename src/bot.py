@@ -2,6 +2,7 @@
 #Import dei vari packages
 from logging import exception
 from unittest import result
+from telegram import User
 import telebot
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
